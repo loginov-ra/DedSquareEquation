@@ -1,9 +1,52 @@
 
-#include <cstdio>
+#include <stdio.h>
+#include <unistd.h>
+#include <getopt.h>
+#include <stdlib.h>
 #include "SquareEquation.h"
 
-int main()
+const int DEFAULT_PRECISION = -1;
+
+struct Options
 {
+    int precision_;
+    bool needVerbose_;
+};
+
+Options getOptions(int argc, char** argv)
+{
+    opterr = 1;
+    const char* possibleOptions = "p:v";
+    option longOpt[3] = { {"precision", 1, nullptr, 'p'},
+                           {"verbose",   0, nullptr, 'v'},
+                           {0,           0,       0,   0} };
+    Options optionsGot = {DEFAULT_PRECISION, false}; 
+
+    
+    int opt = 0;
+    while ((opt = getopt_long(argc, argv, possibleOptions, longOpt, nullptr)) != -1)
+    {
+        switch (opt)
+        {
+            case 'p':
+                optionsGot.precision_ = atoi(optarg);
+                assert(optionsGot.precision_ >= 0);
+                break;
+
+            case 'v':
+                optionsGot.needVerbose_ = true;
+                break;
+        }
+    }
+
+    return optionsGot;
+}
+
+int main(int argc, char** argv)
+{
+    Options options = getOptions(argc, argv);
+    printf("Precision: %d, Verbose: %d\n", options.precision_, options.needVerbose_);
+
     double a = 0, b = 0, c = 0;
     
     printf("Hi! This is a v1.0 of SquareEquationSolver\n"
