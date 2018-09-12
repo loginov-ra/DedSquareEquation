@@ -7,6 +7,15 @@
  * \version 1.0
  */
 
+/*! \mainpage Square Equation Solver
+ * \section Description
+ * Sometimes we are needed to solve equations, and they can be different<br>
+ * When we do it during the exam, numbers are fit to make us happier<br>
+ * And what if not? What if numbers are kind of random? <br>
+ * That's why meet <b>SquareEquationSolver</b><br>
+ * Read further documentation and go on!
+ */
+
 #include <vector>
 #include <cassert>
 #include <cmath>
