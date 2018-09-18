@@ -21,6 +21,8 @@
 #include <cmath>
 #include <iostream>
 
+/* PLEASE DO ALL COMPARISONS WITH DOUBLE-LILE NUMBERS WITH EPSILON! */
+
 /*!
  * Constant to indicate infinite number of roots.
  */
