@@ -32,6 +32,8 @@ int main(int argc, char** argv)
         printf("Imagine your favourite ax^2 + bx + c = 0 equation and just enter a, b, c!\n"
                "a: ");
 
+        /* dude, do yay understand that I can feed any sh*t I want to input? What is supposed to happen? 
+           Nothing! Scanf will just leave "a" as is i.e. 0. Fix it plz */
         scanf("%lf", &a);
 
         printf("b: ");
@@ -49,6 +51,7 @@ int main(int argc, char** argv)
         if (options.precision_ != DEFAULT_PRECISION)
             std::cout << std::setprecision(options.precision_) << std::fixed;
 
+        /* switch statement, did you hear it? */
         if (nRoots == INFINITE_ROOTS)
         {
             printf("has infinite number of roots!\n"
