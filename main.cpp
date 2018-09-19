@@ -9,6 +9,7 @@
 
 const int DEFAULT_PRECISION = -1;
 const size_t MAX_ANSWER_SIZE = 256;
+const size_t MAX_COEFF_SIZE = 256;
 
 struct Options
 {
@@ -19,28 +20,46 @@ struct Options
 Options getOptions(int argc, char** argv);
 bool needContinuation();
 
+bool checkStrRepresentsDouble(const char* str, double* d)
+{
+    char* end = nullptr;
+    *d = strtod(str, &end);
+    return end != str && *d != HUGE_VAL; 
+}
+
+bool enterCorrectCoefficient(const char* name, double* num)
+{
+    char buf[MAX_COEFF_SIZE + 2] = "";
+    printf("%s: ", name);
+    scanf("%s", buf);
+
+    if (!checkStrRepresentsDouble(buf, num))
+    {
+        printf("%s is not a number. Try Again\n", name);
+        return false;
+    }
+
+    return true;
+}
+
 int main(int argc, char** argv)
 {
     Options options = getOptions(argc, argv);
 
     double a = 0, b = 0, c = 0;
-    
+
     printf("Hi! This is a v1.0 of SquareEquationSolver\n");
 
     do
     {
-        printf("Imagine your favourite ax^2 + bx + c = 0 equation and just enter a, b, c!\n"
-               "a: ");
-
-        /* dude, do yay understand that I can feed any sh*t I want to input? What is supposed to happen? 
-           Nothing! Scanf will just leave "a" as is i.e. 0. Fix it plz */
-        scanf("%lf", &a);
-
-        printf("b: ");
-        scanf("%lf", &b);
-
-        printf("c: ");
-        scanf("%lf", &c);
+        printf("Imagine your favourite ax^2 + bx + c = 0 equation and just enter a, b, c!\n");
+        
+        if (!enterCorrectCoefficient("a", &a) ||
+            !enterCorrectCoefficient("b", &b) ||
+            !enterCorrectCoefficient("c", &c))
+        {
+            continue;
+        }
 
         double root1 = 0, root2 = 0;
 
@@ -51,24 +70,25 @@ int main(int argc, char** argv)
         if (options.precision_ != DEFAULT_PRECISION)
             std::cout << std::setprecision(options.precision_) << std::fixed;
 
-        /* switch statement, did you hear it? */
-        if (nRoots == INFINITE_ROOTS)
+        switch (nRoots)
         {
-            printf("has infinite number of roots!\n"
-                   "Any number will fit the equation!\n");
-        }
-        else if (nRoots == 1)
-        {
-            std::cout << " 1 root. It is " << root1 << "\n";
-        }
-        else if (nRoots == 0)
-        {
-            printf(" no roots!\n");
-        }
-        else
-        {
-            std::cout << " 2 roots. They are " << root1 << " and " << root2 << "\n";
-        }
+            case INFINITE_ROOTS:
+                printf("has infinite number of roots!\n"
+                       "Any number will fit the equation!\n");
+                break;
+
+            case 1:
+                std::cout << " 1 root. It is " << root1 << "\n";
+                break;
+
+            case 0:
+                printf(" no roots!\n");
+                break;
+
+            default:
+                std::cout << " 2 roots. They are " << root1 << " and " << root2 << "\n";
+                break;
+        }   
     }
     while (needContinuation());
 

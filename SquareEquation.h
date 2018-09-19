@@ -21,12 +21,15 @@
 #include <cmath>
 #include <iostream>
 
-/* PLEASE DO ALL COMPARISONS WITH DOUBLE-LILE NUMBERS WITH EPSILON! */
-
 /*!
  * Constant to indicate infinite number of roots.
  */
 const int INFINITE_ROOTS = -1;
+
+/*!
+ * Constant for floating-point numbers comparison
+ */
+const double EPS = 1e-5;
 
 /*!
  * Allows to make debug output more concise
@@ -56,7 +59,7 @@ int solveEquation(double a, double b, double c, double* root1, double* root2, bo
     assert(root1 != root2);
     
     COUT << "I am square equation with coeffs: [" << a << ", " << b << ", " << c << "]\n";
-    if (a != 0)
+    if (fabsl(a) > EPS)
     {
         COUT << "A is not 0, that's why I am not trivial\n";
         return solveNontrivialSquareEquation(a, b, c, root1, root2, needVerbose);
@@ -79,7 +82,7 @@ int solveNontrivialSquareEquation(double a, double b, double c, double* root1, d
     assert(root1);
     assert(root2);
     assert(root1 != root2);
-    assert(a != 0);
+    assert(fabsl(a) > EPS);
     COUT << "Nontrivial equation solver called\n";
 
     double discriminant = b * b - 4 * a * c;
@@ -94,14 +97,14 @@ int solveNontrivialSquareEquation(double a, double b, double c, double* root1, d
     *root1 = (-b + sqrt(discriminant)) / (2 * a);
     COUT << "D >= 0. First root calculated: " << *root1 << "\n";
 
-    if (discriminant > 0)
+    if (discriminant > EPS)
     {
         *root2 = (-b - sqrt(discriminant)) / (2 * a);
         COUT << "Moreover, D > 0, so second root calculated " << *root2 << "\n";
     }
     
-    COUT << "Finally, number of roots is " << 1 + (discriminant > 0);
-    return 1 + (discriminant > 0);
+    COUT << "Finally, number of roots is " << 1 + (discriminant > EPS);
+    return 1 + (discriminant > EPS);
 }
 
 /*!
@@ -116,10 +119,10 @@ int solveLinearEquation(double a, double b, double* root, bool needVerbose)
     assert(root);
     COUT << "Linear equation solver called!\n";
 
-    if (a == 0)
+    if (fabsl(a) < EPS)
     {
         COUT << "But that's not linear. It is c = 0\n";
-        if (b == 0)
+        if (fabsl(b) < EPS)
         {
             COUT << "0 = 0 is always true. Infinite number of roots!\n";
             return INFINITE_ROOTS; //Any value in root fits
